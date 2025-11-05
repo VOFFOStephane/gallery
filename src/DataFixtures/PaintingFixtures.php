@@ -32,6 +32,7 @@ class PaintingFixtures extends Fixture implements DependentFixtureInterface
             $painting->setTitle($faker->sentence(3))
                 ->setDescription($faker->paragraph())
                 ->setCreated(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-2 years', 'now')))
+                ->setEdited(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-2 years', 'now')))
                 ->setHeight($faker->randomFloat(2, 20, 200))
                 ->setWidth($faker->randomFloat(2, 20, 200))
                 ->setImage("painting_$i.jpg")

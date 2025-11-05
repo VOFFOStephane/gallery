@@ -1,0 +1,79 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Admin - Post{% endblock %}
+
+{% block body %}
+    <main class="container">
+        <section class="row">
+            <div class="col-md-9 offset-1">
+                <h1 class="display-4 pb-3">Gestion des articles</h1>
+                <a href="{{ path('admin_post_new') }}" class="btn btn-outline-primary">Nouvel artile</a>
+            </div>
+        </section>
+        <section id="posts">
+            <h2 class="display-4 my-5">Tous nos articles</h2>
+
+            {# Ton tableau ici... #}
+
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th>id</th>
+                    <th>titre</th>
+                    <th>image</th>
+                    <th>categorie</th>
+                    <th>technique</th>
+                    <th>description</th>
+                    <th>Date de création</th>
+                    <th>Date d'edition</th>
+                    <th>longueur</th>
+                    <th>largeur</th>
+                    <th>Publié ?</th>
+                    <th>supprimer</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for p in posts %}
+                    <tr>
+                        <td>{{ p.id }}</td>
+                        <td>{{ p.title }}</td>
+                        <td>
+                            {% if p.image %}
+                                <img src="{{ asset('images/' ~ p.image) }}" alt="{{ p.title }}" style="max-width: 100px;">
+                            {% else %}
+                                <em>Aucune image</em>
+                            {% endif %}
+                        </td>
+                        <td>{{ p.category.name }}</td>
+                        <td>{{ p.technique.name }}</td>
+                        <td>{{ p.description |u.truncate(100, '...', false) }}</td>
+                        <td>{{ p.created|date('d/m/Y') }}</td>
+                        <td>{{ p.edited|date('d/m/Y') }}</td>
+                        <td>{{ p.width }}</td>
+                        <td>{{ p.height }}</td>
+                        <td>
+                            {% if p.isPublished %}
+                                ✅
+                            {% else %}
+                                ❌
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <a href="{{ path('admin_delpost', {id: p.id}) }}"
+                               onclick="return confirm('Confirmer la suppression de cet article ?');"
+                               class="btn btn-outline-info">
+                                <i class="icofont-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">Aucun article trouvé.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+{% endblock %}

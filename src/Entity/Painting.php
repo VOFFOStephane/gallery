@@ -4,9 +4,13 @@ namespace App\Entity;
 
 use App\Repository\PaintingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 
 #[ORM\Entity(repositoryClass: PaintingRepository::class)]
+#[Vich\Uploadable]
 class Painting
 {
     #[ORM\Id]
@@ -29,7 +33,7 @@ class Painting
     #[ORM\Column]
     private ?float $width = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
 
@@ -46,6 +50,13 @@ class Painting
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $edited = null;
+
+    #[Vich\UploadableField(mapping: 'painting_image', fileNameProperty: 'image')]
+    private ?File $imageFile = null;
+
 
     public function getId(): ?int
     {
@@ -117,7 +128,7 @@ class Painting
         return $this->image;
     }
 
-    public function setImage(string $image): static
+    public function setImage(?string $image): static
     {
         $this->image = $image;
 
@@ -170,5 +181,33 @@ class Painting
         $this->slug = $slug;
 
         return $this;
+    }
+
+    public function getEdited(): ?\DateTimeImmutable
+    {
+        return $this->edited;
+    }
+
+    public function setEdited(\DateTimeImmutable $edited): static
+    {
+        $this->edited = $edited;
+
+        return $this;
+    }
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->edited = new \DateTimeImmutable();
+        }
+    }
+
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
     }
 }
