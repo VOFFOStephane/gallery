@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello GalleryController!{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center mb-4">🎨 Galerie des Tableaux</h1>
+
+        <div class="row g-4">
+            {% for painting in paintings %}
+                <div class="col-md-4 col-lg-3">
+                    <div class="card shadow-sm h-100">
+                        <img src="{{ asset('images/' ~ painting.image) }}" class="card-img-top" alt="{{ painting.title }}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ painting.title }}</h5>
+                            <p class="card-text mb-1">
+                                <strong>Date :</strong> {{ painting.created|date('d/m/Y') }}
+                            </p>
+                            <p class="card-text mb-2">
+                                <strong>Catégorie :</strong> {{ painting.category.name }}
+                            </p>
+                            <a href="{{ path('app_gallery_painting', {slug: painting.slug}) }}" class="btn btn-outline-primary btn-sm">
+                                Voir détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12 text-center">
+                    <p class="text-muted">Aucun tableau disponible pour le moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,10 +1,19 @@
-import './bootstrap.js';
-/*
- * Welcome to your app's main JavaScript file!
- *
- * This file will be included onto the page via the importmap() Twig function,
- * which should already be in your base.html.twig.
+/**
+ * Application main entry (assets/app.js)
  */
+
+// Bootstrap setup
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+//icofont
+import './styles/icofont/icofont.min.css'
+
+
+// Symfony bootstrap file
+import './bootstrap.js';
+
+// Custom styles
 import './styles/app.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+console.log('✅ Bootstrap and styles loaded successfully!');
+

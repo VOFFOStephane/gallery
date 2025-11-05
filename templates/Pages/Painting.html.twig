@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello GalleryController!{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row g-4">
+            <!-- Image à gauche -->
+            <div class="col-md-5">
+                <div class="card shadow-sm">
+                    <img src="{{ asset('images/' ~ painting.image) }}" alt="{{ painting.title }}" class="card-img-top img-fluid rounded">
+                </div>
+            </div>
+
+            <!-- Informations à droite -->
+            <div class="col-md-7">
+                <h1 class="mb-3">{{ painting.title }}</h1>
+
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item"><strong>Date :</strong> {{ painting.created|date('d/m/Y') }}</li>
+                    <li class="list-group-item"><strong>Catégorie :</strong> {{ painting.category.name }}</li>
+                    <li class="list-group-item"><strong>Technique :</strong> {{ painting.technique.name }}</li>
+                    <li class="list-group-item"><strong>Description :</strong> {{ painting.description }}</li>
+                </ul>
+
+                <a href="{{ path('app_gallery') }}" class="btn btn-secondary mt-3">⬅ Retour à la galerie</a>
+            </div>
+        </div>
+    </div
+{% endblock %}

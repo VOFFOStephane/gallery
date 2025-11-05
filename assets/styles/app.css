@@ -1,3 +1,8 @@
-body {
-    background-color: skyblue;
+.carousel-item img {
+    height: 500px;
+    object-fit: cover;
+}
+.card:hover {
+    transform: scale(1.03);
+    transition: transform 0.2s ease;
 }
