@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Painting;
+use App\Entity\Category;
+use App\Repository\CategoryRepository;
 use App\Repository\PaintingRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,4 +54,17 @@ final class GalleryController extends AbstractController
     {
         return $this->render('Pages/Team.html.twig');
     }
+//affichage par categories
+    #[Route('/gallery/category/{slug}', name: 'app_gallery_by_category')]
+    public function galleryByCategory(
+        #[MapEntity(mapping: ['slug' => 'slug'])] Category $category
+        ): Response
+    {
+        return $this->render('Pages/Gallery.html.twig', [
+            'paintings' => $category->getPaintings(),
+            'category' => $category,
+        ]);
+    }
+
+
 }

@@ -15,6 +15,22 @@
                     <li class="nav-item">
                         <a class="nav-link {% if app.request.attributes.get('_route') == 'app_gallery' %}active{% endif %}" href="{{ path('app_gallery') }}">Galerie</a>
                     </li>
+                    {# Dropdown Catégories #}
+                    {% set categories = get_categories() %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Catégories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for category in categories %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_gallery_by_category', { slug: category.slug }) }}">
+                                        {{ category.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link {% if app.request.attributes.get('_route') == 'app_about' %}active{% endif %}" href="{{ path('app_about') }}">À propos</a>
                     </li>
