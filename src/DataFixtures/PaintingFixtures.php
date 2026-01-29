@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Painting;
+use App\Entity\User;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\Entity\Category;
 use App\Entity\Technique;
@@ -22,6 +23,8 @@ class PaintingFixtures extends Fixture implements DependentFixtureInterface
         // Récupère toutes les catégories et techniques existantes
         $categories = $manager->getRepository(Category::class)->findAll();
         $techniques = $manager->getRepository(Technique::class)->findAll();
+        //recup des users par peinture
+        $users = $manager->getRepository(User::class)->findAll();
 
         if (empty($categories) || empty($techniques)) {
             throw new \Exception('Vous devez d’abord créer les fixtures pour Category et Technique.');
@@ -39,7 +42,8 @@ class PaintingFixtures extends Fixture implements DependentFixtureInterface
                 ->setIsPublished($faker->boolean(90))
                 ->setCategory($faker->randomElement($categories))
                 ->setTechnique($faker->randomElement($techniques))
-                ->setSlug($slugify->slugify($painting->getTitle()));
+                ->setSlug($slugify->slugify($painting->getTitle()))
+                ->setUser($users[array_rand($users)]);
 
             $manager->persist($painting);
         }
@@ -52,6 +56,7 @@ class PaintingFixtures extends Fixture implements DependentFixtureInterface
         return [
             CategoryFixtures::class,
             TechniqueFixtures::class,
+            UserFixtures::class,
         ];
     }
 }

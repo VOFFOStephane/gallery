@@ -19,6 +19,9 @@
                             <p class="card-text mb-2">
                                 <strong>Catégorie :</strong> {{ painting.category.name }}
                             </p>
+                            <p class="card-text mb-3">
+                                <strong>Auteur :</strong> {{ painting.user.firstName }} {{ painting.user.lastName }}
+                            </p>
                             <a href="{{ path('app_gallery_painting', {slug: painting.slug}) }}" class="btn btn-outline-primary btn-sm">
                                 Voir détails
                             </a>
@@ -30,6 +33,10 @@
                     <p class="text-muted">Aucun tableau disponible pour le moment.</p>
                 </div>
             {% endfor %}
+            <div class="pt-5 d-flex justify-content-center">
+                {{ knp_pagination_render(paintings) }}
+            </div>
+
         </div>
     </div>
 {% endblock %}

@@ -6,6 +6,7 @@
     <main class="container">
         <section class="row">
             <div class="col-md-9 offset-1">
+                {% include 'admin/partials/flash.html.twig' %}
                 <h1 class="display-4 pb-3">Gestion des articles</h1>
                 <a href="{{ path('admin_post_new') }}" class="btn btn-outline-primary">Nouvel artile</a>
             </div>
@@ -14,14 +15,15 @@
             <h2 class="display-4 my-5">Tous nos articles</h2>
 
             {# Ton tableau ici... #}
-
-            <table class="table table-bordered table-hover">
+          <div class="table-responsive">
+            <table id="postsTable" class="table table-bordered table-hover">
                 <thead class="table-dark">
                 <tr>
                     <th>id</th>
                     <th>titre</th>
                     <th>image</th>
                     <th>categorie</th>
+                    <th>auteur</th>
                     <th>technique</th>
                     <th>description</th>
                     <th>Date de création</th>
@@ -30,6 +32,8 @@
                     <th>largeur</th>
                     <th>Publié ?</th>
                     <th>supprimer</th>
+                    <th>editer</th>
+                    <th>Masquer</th>
 
                 </tr>
                 </thead>
@@ -46,6 +50,7 @@
                             {% endif %}
                         </td>
                         <td>{{ p.category.name }}</td>
+                        <td>{{ p.user.firstName }} {{ p.user.lastName }}</td>
                         <td>{{ p.technique.name }}</td>
                         <td>{{ p.description |u.truncate(100, '...', false) }}</td>
                         <td>{{ p.created|date('d/m/Y') }}</td>
@@ -66,6 +71,16 @@
                                 <i class="icofont-trash"></i>
                             </a>
                         </td>
+
+                        <td> <a href="{{ path('admin_post_edit', {id:p.id}) }}" class="btn btn-outline-danger"><i class="icofont-edit-alt"></i></a></td>
+                        <td><a href="{{ path('app_admin_hidepost', {id:p.id}) }}">
+                                {% if p.isPublished %}
+                                <i class="icofont-eye"></i>
+                                {% else %}
+                                <i class="icofont-eye" style="color: red;"></i>
+                            </a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% else %}
                     <tr>
@@ -74,6 +89,20 @@
                 {% endfor %}
                 </tbody>
             </table>
+          </div>
+            <script>
+                    $(document).ready(function () {
+                    $('#postsTable').DataTable({
+                        language: {
+                            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
+                        },
+                        pageLength: 5,
+                        lengthMenu: [5, 10, 25, 50, 100],
+                        order: [[5, 'desc']], // tri par date de création (colonne 6)
+                        responsive: true
+                    });
+                });
+            </script>
         </section>
     </main>
 {% endblock %}

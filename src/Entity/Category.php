@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -16,7 +17,11 @@ class Category
     #[ORM\Column]
     private ?int $id = null;
 
-
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3,
+        max: 255,
+        minMessage: 'un nom de categorie doit contenir au minimum {{ limit }} caracteres',
+        maxMessage: 'un nom de categorie doit contenir au maximum {{ limit }} caracteres')]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

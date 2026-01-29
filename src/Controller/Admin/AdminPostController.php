@@ -10,11 +10,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 
+#[IsGranted('ROLE_ADMIN')]
 final class AdminPostController extends AbstractController
 {
+    private SluggerInterface $slugger;
+
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
     #[Route('/admin/posts', name: 'admin_post_index')]
     public function index(PaintingRepository $paintingRepository): Response
     {
@@ -34,9 +42,14 @@ final class AdminPostController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+
+        if ($form->isSubmitted() ) {
             $slug = strtolower($slugger->slug($painting->getTitle())->toString());
-            $painting->setSlug($slug);
+            $painting->setSlug($slug)
+                ->setUser($this->getUser())
+                ->setCreated(new \DateTimeImmutable())
+            ->setEdited(new \DateTimeImmutable()); // 🔥 obligatoire
+
             $em->persist($painting);
             $em->flush();
 
@@ -48,6 +61,34 @@ final class AdminPostController extends AbstractController
         return $this->render('admin/posts/new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    //Editer
+    #[Route('/admin/editpost/{id}', name: 'admin_post_edit')]
+    public function editPost(Request $request, EntityManagerInterface $em, Painting $painting): Response
+    {
+        $form = $this->createForm(PostType::class, $painting);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $this->slugger->slug($painting->getTitle())->lower();
+            $painting->setEdited(new \DateTimeImmutable())
+            ->setSlug($slug);
+            $em->flush();
+            return $this->redirectToRoute('admin_post_index');
+        }
+        return $this->render('admin/posts/edit.html.twig', [
+            'form' => $form,
+            'painting' => $painting,
+        ]);
+
+    }
+     //MASQUER
+    #[Route('/admin/hidepost/{id}', name: 'app_admin_hidepost')]
+    public function hidePost( Painting $painting, EntityManagerInterface $em): Response
+    {
+        $painting->setIsPublished(!$painting->IsPublished());
+        $em->flush();
+        return $this->redirectToRoute('admin_post_index');
     }
 
     //SUPPRIMER

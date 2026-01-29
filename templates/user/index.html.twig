@@ -1,0 +1,91 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Admin - Post{% endblock %}
+
+{% block body %}
+    <main class="container">
+
+        <section id="posts">
+            <h2 class="display-4 my-5">Tous nos articles</h2>
+
+            {# Ton tableau ici... #}
+            <div class="table-responsive">
+                <table id="postsTable" class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>id</th>
+                        <th>email</th>
+                        <th>nom</th>
+                        <th>prenom</th>
+                        <th>image</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for u in users %}
+                        <tr>
+                            <td>{{ p.id }}</td>
+                            <td>{{ p.nom }}</td>
+                            <td>
+                                {% if p.imageName %}
+                                    <img src="{{ asset('images/avatar' ~ p.imageName) }}" alt="{{ p.imageName }}" style="max-width: 100px;">
+                                {% else %}
+                                    <em>Aucune image</em>
+                                {% endif %}
+                            </td>
+                            <td>{{ p.category.name }}</td>
+                            <td>{{ p.user.firstName }} {{ p.user.lastName }}</td>
+                            <td>{{ p.technique.name }}</td>
+                            <td>{{ p.description |u.truncate(100, '...', false) }}</td>
+                            <td>{{ p.created|date('d/m/Y') }}</td>
+                            <td>{{ p.edited|date('d/m/Y') }}</td>
+                            <td>{{ p.width }}</td>
+                            <td>{{ p.height }}</td>
+                            <td>
+                                {% if p.isPublished %}
+                                    ✅
+                                {% else %}
+                                    ❌
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ path('admin_delpost', {id: p.id}) }}"
+                                   onclick="return confirm('Confirmer la suppression de cet article ?');"
+                                   class="btn btn-outline-info">
+                                    <i class="icofont-trash"></i>
+                                </a>
+                            </td>
+
+                            <td> <a href="{{ path('admin_post_edit', {id:p.id}) }}" class="btn btn-outline-danger"><i class="icofont-edit-alt"></i></a></td>
+                            <td><a href="{{ path('app_admin_hidepost', {id:p.id}) }}">
+                                    {% if p.isPublished %}
+                                    <i class="icofont-eye"></i>
+                                    {% else %}
+                                    <i class="icofont-eye" style="color: red;"></i>
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">Aucun article trouvé.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $('#postsTable').DataTable({
+                        language: {
+                            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
+                        },
+                        pageLength: 5,
+                        lengthMenu: [5, 10, 25, 50, 100],
+                        order: [[5, 'desc']], // tri par date de création (colonne 6)
+                        responsive: true
+                    });
+                });
+            </script>
+        </section>
+    </main>
+{% endblock %}

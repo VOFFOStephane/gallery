@@ -6,7 +6,7 @@ use App\Repository\PaintingRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: PaintingRepository::class)]
@@ -18,18 +18,27 @@ class Painting
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3,
+        max: 255,
+        minMessage: 'le titre de l\'article doit contenir au minimum {{ limit }} caracteres',
+        maxMessage: 'le titre de l\'article doit contenir au maximum {{ limit }} caracteres')]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 120,
+        minMessage: 'le contenu de l\'article doit contenir au minimum {{ limit }} caracteres')
+    ]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created = null;
-
+    #[Assert\NotBlank]
     #[ORM\Column]
     private ?float $height = null;
-
+    #[Assert\NotBlank]
     #[ORM\Column]
     private ?float $width = null;
 
@@ -57,6 +66,15 @@ class Painting
     #[Vich\UploadableField(mapping: 'painting_image', fileNameProperty: 'image')]
     private ?File $imageFile = null;
 
+    #[ORM\ManyToOne(inversedBy: 'paintings')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
+
+    public function __construct()
+    {
+        $this->created = new \DateTimeImmutable();
+        $this->edited = new \DateTimeImmutable(); // 🔥 valeur par défaut
+    }
 
     public function getId(): ?int
     {
@@ -209,5 +227,17 @@ class Painting
     public function getImageFile(): ?File
     {
         return $this->imageFile;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

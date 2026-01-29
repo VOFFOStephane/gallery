@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Mon profil</h1>
+
+        <div class="card p-3 mt-3">
+            <p><strong>Nom :</strong> {{ user.lastName }}</p>
+            <p><strong>Prénom :</strong> {{ user.firstName }}</p>
+            <p><strong>Email :</strong> {{ user.email }}</p>
+
+            <img src="{{ asset('images/avatar/' ~ user.imageName) }}"
+                 alt="Avatar"
+                 style="width:100px;height:100px;border-radius:50%;object-fit:cover">
+
+            <a href="{{ path('app_profile_edit') }}" class="btn btn-primary mt-3">Modifier le profil</a>
+        </div>
+    </div>
+{% endblock %}
+

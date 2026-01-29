@@ -6,6 +6,7 @@ use App\Repository\TechniqueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TechniqueRepository::class)]
 class Technique
@@ -14,7 +15,11 @@ class Technique
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3,
+        max: 255,
+        minMessage: 'un nom de technique doit contenir au minimum {{ limit }} caracteres',
+        maxMessage: 'un nom de technique doit contenir au maximum {{ limit }} caracteres')]
     #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 

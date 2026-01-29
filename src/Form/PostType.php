@@ -7,6 +7,7 @@ use App\Entity\Painting;
 use App\Entity\Technique;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
@@ -17,10 +18,7 @@ class PostType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('description')
-            ->add('created', null, [
-                'widget' => 'single_text',
-            ])
+            ->add('description',TextareaType::class)
             ->add('height')
             ->add('width')
             ->add('imageFile', VichFileType::class,[
