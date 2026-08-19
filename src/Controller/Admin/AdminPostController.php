@@ -48,7 +48,7 @@ final class AdminPostController extends AbstractController
             $painting->setSlug($slug)
                 ->setUser($this->getUser())
                 ->setCreated(new \DateTimeImmutable())
-            ->setEdited(new \DateTimeImmutable()); // 🔥 obligatoire
+            ->setEdited(new \DateTimeImmutable());
 
             $em->persist($painting);
             $em->flush();
@@ -83,19 +83,25 @@ final class AdminPostController extends AbstractController
 
     }
      //MASQUER
-    #[Route('/admin/hidepost/{id}', name: 'app_admin_hidepost')]
-    public function hidePost( Painting $painting, EntityManagerInterface $em): Response
+    #[Route('/admin/hidepost/{id}', name: 'app_admin_hidepost', methods: ['POST'])]
+    public function hidePost(Request $request, Painting $painting, EntityManagerInterface $em): Response
     {
+        if (!$this->isCsrfTokenValid('hide-post' . $painting->getId(), $request->getPayload()->getString('_token'))) {
+            throw $this->createAccessDeniedException('Jeton CSRF invalide.');
+        }
+
         $painting->setIsPublished(!$painting->IsPublished());
         $em->flush();
         return $this->redirectToRoute('admin_post_index');
     }
 
     //SUPPRIMER
-    #[\Symfony\Component\Routing\Annotation\Route('/admin/delpost/{id}', name: 'admin_delpost')]
-    public function delPost(Painting $post, EntityManagerInterface $manager): Response
+    #[Route('/admin/delpost/{id}', name: 'admin_delpost', methods: ['POST'])]
+    public function delPost(Request $request, Painting $post, EntityManagerInterface $manager): Response
     {
-        //paramconverter
+        if (!$this->isCsrfTokenValid('delete-post' . $post->getId(), $request->getPayload()->getString('_token'))) {
+            throw $this->createAccessDeniedException('Jeton CSRF invalide.');
+        }
 
         $manager->remove($post);
         $manager->flush();

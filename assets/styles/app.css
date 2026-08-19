@@ -6,3 +6,55 @@
     transform: scale(1.03);
     transition: transform 0.2s ease;
 }
+
+/* --- Navigation Turbo (assets/turbo-ux.js) --- */
+
+/* Léger fondu pendant qu'une nouvelle page se charge, au lieu d'un
+   changement brut. On anime <html> plutôt que <body> : ça reste actif
+   même si le <body> est totalement remplacé par Turbo. */
+html {
+    transition: opacity 0.15s ease-out;
+}
+html.turbo-fade-out {
+    opacity: 0.5;
+}
+
+/* La barre de progression que Turbo affiche automatiquement en haut de
+   la page sur les navigations un peu longues (chargée par défaut sans
+   style visible). */
+.turbo-progress-bar {
+    height: 3px;
+    background-color: #0d6efd;
+}
+
+/* --- État de chargement sur les boutons de formulaire --- */
+
+.is-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.75;
+}
+.is-loading::after {
+    content: "";
+    display: inline-block;
+    width: 0.9em;
+    height: 0.9em;
+    margin-left: 0.5em;
+    vertical-align: -0.15em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: btn-spin 0.6s linear infinite;
+}
+@keyframes btn-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Champs de formulaire (thème Bootstrap activé dans twig.yaml) --- */
+
+.form-control:focus,
+.form-select:focus {
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}

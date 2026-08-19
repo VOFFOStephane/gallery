@@ -65,21 +65,28 @@
                             {% endif %}
                         </td>
                         <td class="text-center">
-                            <a href="{{ path('admin_delpost', {id: p.id}) }}"
-                               onclick="return confirm('Confirmer la suppression de cet article ?');"
-                               class="btn btn-outline-info">
-                                <i class="icofont-trash"></i>
-                            </a>
+                            <form method="post" action="{{ path('admin_delpost', {id: p.id}) }}"
+                                  onsubmit="return confirm('Confirmer la suppression de cet article ?');"
+                                  style="display:inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-post' ~ p.id) }}">
+                                <button type="submit" class="btn btn-outline-info">
+                                    <i class="icofont-trash"></i>
+                                </button>
+                            </form>
                         </td>
 
                         <td> <a href="{{ path('admin_post_edit', {id:p.id}) }}" class="btn btn-outline-danger"><i class="icofont-edit-alt"></i></a></td>
-                        <td><a href="{{ path('app_admin_hidepost', {id:p.id}) }}">
-                                {% if p.isPublished %}
-                                <i class="icofont-eye"></i>
-                                {% else %}
-                                <i class="icofont-eye" style="color: red;"></i>
-                            </a>
-                            {% endif %}
+                        <td>
+                            <form method="post" action="{{ path('app_admin_hidepost', {id: p.id}) }}" style="display:inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('hide-post' ~ p.id) }}">
+                                <button type="submit" class="btn btn-link p-0 border-0">
+                                    {% if p.isPublished %}
+                                        <i class="icofont-eye"></i>
+                                    {% else %}
+                                        <i class="icofont-eye" style="color: red;"></i>
+                                    {% endif %}
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% else %}

@@ -38,9 +38,8 @@ final class ProfileController extends AbstractController
         $form = $this->createForm(ProfileEdtType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() ) {
-
-            // 🔥 Force l’update même si aucune image n’a été modifiée
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Force l'update même si aucune image n'a été modifiée
             $user->setUpdatedAt(new \DateTimeImmutable());
             $em->flush();
 

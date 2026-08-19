@@ -1,5 +1,9 @@
 twig:
     file_name_pattern: '*.twig'
+    # Sans ça, form_widget()/form_row() rendent du HTML brut, sans classes
+    # Bootstrap (form-control, form-label, mb-3...) — tous les formulaires
+    # (login, inscription, contact, profil, admin) en profitent d'un coup.
+    form_themes: ['bootstrap_5_layout.html.twig']
 
 when@test:
     twig:

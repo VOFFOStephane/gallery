@@ -58,14 +58,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 120)]
     private ?string $lastName = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageName = null;
+
     #[Assert\File(
         maxSize: "2M",
         mimeTypes: ["image/jpeg", "image/png"],
         mimeTypesMessage: "Veuillez uploader une image au format JPEG ou PNG."
     )]
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $imageName = null;
-
     #[Vich\UploadableField(mapping: 'users', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
 

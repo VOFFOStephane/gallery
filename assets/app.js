@@ -12,6 +12,9 @@ import './styles/icofont/icofont.min.css'
 // Symfony bootstrap file
 import './bootstrap.js';
 
+// Retouches UX (transition de page, boutons en chargement) — voir le fichier
+import './turbo-ux.js';
+
 // Custom styles
 import './styles/app.css';
 

@@ -73,7 +73,7 @@ class Painting
     public function __construct()
     {
         $this->created = new \DateTimeImmutable();
-        $this->edited = new \DateTimeImmutable(); // 🔥 valeur par défaut
+        $this->edited = new \DateTimeImmutable(); // valeur par défaut
     }
 
     public function getId(): ?int

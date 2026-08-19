@@ -3,11 +3,16 @@
 {% block title %}Créer un Post{% endblock %}
 
 {% block body %}
-    <h1>Créer un nouveau post</h1>
+    <main class="container">
+        <section class="row">
+            <div class="col-md-6 offset-1">
+                <h1 class="display-5 my-4">Créer un nouveau post</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-primary">Enregistrer</button>
-    {{ form_end(form) }}
-
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                {{ form_end(form) }}
+            </div>
+        </section>
+    </main>
 {% endblock %}

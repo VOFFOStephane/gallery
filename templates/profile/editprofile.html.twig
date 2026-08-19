@@ -3,12 +3,18 @@
 {% block title %}Modifier mon profil{% endblock %}
 
 {% block body %}
-    {% include 'partials/flash.html.twig' %}
-    <h1>Modifier mon profil</h1>
-    {{ form_errors(form) }}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-primary">Mettre à jour</button>
-    {{ form_end(form) }}
+    <main class="section">
+        <section class="row">
+            <div class="col-md-6 offset-md-3">
+                {% include 'Partials/flash.html.twig' %}
+                <h1 class="mb-4">Modifier mon profil</h1>
+                {{ form_errors(form) }}
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                {{ form_end(form) }}
+            </div>
+        </section>
+    </main>
 {% endblock %}
 

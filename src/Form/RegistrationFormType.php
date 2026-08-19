@@ -11,7 +11,6 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -64,18 +63,11 @@ class RegistrationFormType extends AbstractType
                         'allow_delete' => false,
                         'download_uri' => false,
                         'asset_helper' => true,
-                        // 🔥 Empêcher la sélection de fichiers non-images
+                        // Empêche la sélection de fichiers non-images côté navigateur ;
+                        // la vraie validation (type, taille) est portée par la contrainte
+                        // Assert\File sur User::$imageFile, appliquée à tous les formulaires.
                         'attr' => [
                             'accept' => 'image/*'
-                        ],
-
-
-                        // 🔥 Validation backend
-                        'constraints' => [
-                            new Image([
-                                'maxSize' => '5M',
-                                'mimeTypesMessage' => 'Veuillez uploader une image valide (JPG, PNG, WEBP).'
-                            ])
                         ],
                     ])
                     ->add('agreeTerms', CheckboxType::class, [
@@ -93,7 +85,7 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'is_edit' => false,   // 🔥 par défaut, c’est l'inscription
+            'is_edit' => false, // par défaut, c'est l'inscription
         ]);
     }
 }
